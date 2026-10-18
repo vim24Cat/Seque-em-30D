@@ -50,8 +50,14 @@
   .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 28%;user-select:none}
   .hero-grad-t{position:absolute;inset:0;background:linear-gradient(to top,var(--cream),rgba(255,250,245,.2),transparent)}
   .hero-badge{position:absolute;top:14px;left:16px;background:#000;color:#fff;font-size:10px;font-weight:900;letter-spacing:.14em;padding:7px 12px;border-radius:9999px;box-shadow:0 4px 12px rgba(0,0,0,.2)}
-  .hero-social{position:absolute;bottom:0;left:0;right:0;padding:16px}
-  .hero-social-inner{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);padding:8px 14px;border-radius:9999px;border:1px solid rgba(0,0,0,.1);box-shadow:0 6px 20px rgba(0,0,0,.08)}
+  .hero-social{position:absolute;bottom:0;left:0;right:0;padding:12px 16px}
+  .hero-social-inner{display:flex;justify-content:center;width:100%}
+  .audio-free{margin-top:16px;padding:12px;background:#fff;border:1px solid rgba(10,90,58,.16);border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.04)}
+  .audio-free-label{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 auto;font-size:12px;line-height:1.35;font-weight:700;color:#222;text-align:left}
+  .audio-free-player-clip{position:relative;width:46px;height:46px;flex:0 0 46px;overflow:hidden;border-radius:50%;background:#fff}
+  .audio-free-player{position:absolute;top:-5px;left:-48px;display:block;width:220px;height:76px;border:0}
+  .audio-free-play-face{position:absolute;inset:0;z-index:1;display:grid;place-items:center;border-radius:50%;background:var(--green);pointer-events:none}
+  .audio-free-play-face::after{content:"";width:0;height:0;margin-left:3px;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:10px solid #fff}
   .avatar-stack{display:flex;margin-right:-8px}
   .avatar{width:28px;height:28px;border-radius:9999px;border:2.5px solid #fff;margin-left:-8px}
   .avatar:first-child{margin-left:0}
@@ -72,7 +78,6 @@
   .hero-card p{margin:0;font-size:17px;line-height:1.38;font-weight:600;color:#222}
   .hl-orange{background:var(--orange);color:#fff;padding:2px 6px;border-radius:6px;font-weight:900}
   .hl-underline{text-decoration:underline;text-decoration-color:var(--green);text-decoration-thickness:3px;text-underline-offset:4px;font-weight:700}
-
   .benefits{margin-top:24px;display:grid;grid-template-columns:1fr;gap:12px}
   .benefit{display:flex;gap:12px;align-items:flex-start;background:#fff;border-radius:16px;border:1px solid rgba(0,0,0,.06);padding:14px;box-shadow:0 2px 10px rgba(0,0,0,.03)}
   .benefit-check{width:32px;height:32px;border-radius:9999px;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:900;font-size:13px;flex-shrink:0}
@@ -207,8 +212,6 @@
   .btn-checkout:active{transform:translateY(2px)}
   .btn-checkout-alt{display:block;margin-top:12px;width:100%;background:#111;color:#fff;font-weight:700;font-size:13px;padding:13px;border-radius:16px;text-transform:uppercase;letter-spacing:.1em;text-align:center;text-decoration:none}
   .offer-secure{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:16px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.4);flex-wrap:wrap}
-  .offer-bonus{margin-top:20px;background:#fff7ee;border:1px dashed rgba(0,0,0,.15);border-radius:16px;padding:14px}
-  .offer-bonus p{margin:0;font-size:11px;line-height:1.45;color:rgba(0,0,0,.65);text-align:center}
   .btn-share{margin:20px 24px 0;width:calc(100% - 48px);background:#fff;border:1.5px solid rgba(0,0,0,.1);color:#000;font-weight:700;font-size:12px;padding:14px;border-radius:16px;text-transform:uppercase;letter-spacing:.12em;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:all .15s;font-family:inherit}
   .btn-share:hover{background:#000;color:#fff}
 
@@ -362,17 +365,12 @@
     );
 
     // -------- TELA 0: HERO --------
-    const hero = h("div", { className: "flex-1 flex flex-col", style:{flex:1,display:"flex",flexDirection:"column",animation:"slideUp .5s ease"} },
+    const hero = h("div", { className: "flex-1 flex flex-col", style:{flex:1,display:step === 0 ? "flex" : "none",flexDirection:"column",animation:"slideUp .5s ease"} },
       h("div", { className: "hero-img-wrap" },
         h("img", { src: HERO_IMG, alt: "Mulher se olhando no espelho", className: "hero-img", draggable: false,
           onError: function(e){ e.target.style.display = "none"; } }),
         h("div", { className: "hero-grad-t" }),
         h("div", { className: "hero-badge" }, "QUIZ GRATUITO"),
-        h("div", { className: "hero-social" },
-          h("div", { className: "hero-social-inner" },
-            h("span", { style:{fontSize:11,fontWeight:700,color:"#000"} }, "Um passo de cada vez, no seu ritmo")
-          )
-        )
       ),
       h("div", { className: "hero-body" },
         h("h1", { className: "hero-title" },
@@ -407,6 +405,21 @@
               h("b", null, "Foco emocional + estética + saúde."),
               " Não é só balança, é você por inteiro."
             )
+          )
+        ),
+        h("section", { className: "audio-free", "aria-label": "Áudio grátis" },
+          h("div", { className: "audio-free-label" },
+            h("div", { className: "audio-free-player-clip" },
+            h("iframe", {
+              className: "audio-free-player",
+              src: "https://drive.google.com/file/d/1KWs-xbmw1YM2oN5NACcJ8siP5vyJKa6y/preview",
+              title: "Áudio grátis",
+              allow: "autoplay",
+              sandbox: "allow-scripts allow-same-origin"
+            }),
+            h("span", { className: "audio-free-play-face", "aria-hidden": "true" })
+            ),
+            h("span", null, "Um passo de cada vez, no seu ritmo. Ouça o áudio grátis:")
           )
         ),
         h("button", {
@@ -629,12 +642,6 @@
               h("span", null, "🛡️ Garantia 7 dias"),
               h("span", null, "•"),
               h("span", null, "⚡ Acesso imediato")
-            ),
-            h("div", { className: "offer-bonus" },
-              h("p", null,
-                h("b", null, "🎁 BÔNUS HOJE:"),
-                " Áudio de acolhimento emocional para começar leve."
-              )
             )
           ),
           h("button", { className: "btn-share",
@@ -671,7 +678,7 @@
     return h("div", { className: "app-shell" },
       h("div", { className: "app-card" },
         progressBar,
-        step === 0 ? hero : null,
+        hero,
         questions,
         lead,
         result,
