@@ -156,6 +156,10 @@
   .res-card{margin-top:24px;background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:16px;padding:20px;box-shadow:0 8px 28px rgba(0,0,0,.06)}
   .res-card p{margin:0;font-size:14.5px;line-height:1.55;color:#222;font-weight:500}
   .res-card b{font-weight:700}
+  .comments-section{margin:16px 24px 0}
+  .comments-title{font-family:'Anton',sans-serif;font-size:24px;line-height:1;text-transform:uppercase;margin:0}
+  .comments-card{margin-top:12px;background:#fff;border:1px solid rgba(0,0,0,.08);border-left:4px solid var(--green);border-radius:14px;padding:16px;box-shadow:0 4px 16px rgba(0,0,0,.04)}
+  .comments-card p{margin:0;font-size:13px;line-height:1.5;color:rgba(0,0,0,.65)}
   .tag{display:inline-block;padding:2px 6px;border-radius:4px;font-size:12px;color:#fff}
   .tag-black{background:#111}
   .tag-green{background:var(--green)}
@@ -327,8 +331,10 @@
         });
         setSelected(null);
         if (step < 6) setStep(step + 1);
-        else setStep(7);
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        else {
+          setStep(7);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
       }, 260);
     };
 
@@ -341,7 +347,6 @@
 
     const minutes = Math.floor(timer / 60);
     const seconds = timer % 60;
-    const compatibility = 87 + (answers.length % 7);
 
     // -------- BARRA DE PROGRESSO --------
     const progressBar = h("div", { className: "progress-bar" },
@@ -362,15 +367,10 @@
         h("img", { src: HERO_IMG, alt: "Mulher se olhando no espelho", className: "hero-img", draggable: false,
           onError: function(e){ e.target.style.display = "none"; } }),
         h("div", { className: "hero-grad-t" }),
-        h("div", { className: "hero-badge" }, "● AO VIVO • "),
+        h("div", { className: "hero-badge" }, "QUIZ GRATUITO"),
         h("div", { className: "hero-social" },
           h("div", { className: "hero-social-inner" },
-            h("div", { className: "avatar-stack" },
-              h("div", { className: "avatar a1" }),
-              h("div", { className: "avatar a2" }),
-              h("div", { className: "avatar a3" })
-            ),
-            h("span", { style:{fontSize:11,fontWeight:700,color:"#000"} }, "+3.247 mulheres já começaram")
+            h("span", { style:{fontSize:11,fontWeight:700,color:"#000"} }, "Um passo de cada vez, no seu ritmo")
           )
         )
       ),
@@ -450,7 +450,11 @@
         h("div", { className: "q-footer" },
           h("button", {
             className: "q-back",
-            onClick: () => { setStep(Math.max(0, step - 1)); setSelected(null); }
+            onClick: () => {
+              if (step === 1) window.scrollTo({ top: 0, behavior: "smooth" });
+              setStep(Math.max(0, step - 1));
+              setSelected(null);
+            }
           }, "← Voltar"),
           h("span", { className: "q-count" },
             answers.length + " respostas • faltam " + (6 - step + 1)
@@ -543,7 +547,7 @@
       result = h("div", { className: "result-wrap" },
         confetti,
         h("div", { className: "res-head" },
-          h("div", { className: "res-badge" }, "Perfil mapeado • " + compatibility + "% de compatibilidade"),
+          h("div", { className: "res-badge" }, "Perfil baseado nas suas respostas"),
           h("h2", { className: "res-h2" },
             h("span", { className: "c-black" }, firstName + ", seu corpo está pedindo socorro,"),
             h("br"),
@@ -553,19 +557,13 @@
           ),
           h("div", { className: "res-card" },
             h("p", null,
-              "Você não está sozinha. ",
-              h("b", null, compatibility + "% das mulheres"),
-              " que responderam igual a você sentem vergonha no espelho e cansaço no fim do dia.",
-              h("br"), h("br"),
-              "Isso não é falta de força, " + firstName + ". É falta de um ",
-              h("b", null, "método simples"),
-              " que cuide da sua ",
+              "Pelas suas respostas, autoestima, saúde e bem-estar são pontos importantes para você neste momento. Isso não é falta de força, " + firstName + ". Um caminho possível começa com passos simples que cuidem da sua ",
               h("span", { className: "tag tag-black" }, "estética"),
               ", da sua ",
               h("span", { className: "tag tag-green" }, "saúde"),
               " e do seu ",
               h("span", { className: "tag tag-orange" }, "emocional"),
-              " ao mesmo tempo.",
+              " com atenção e sem culpa.",
               h("br"), h("br"),
               "Foi por isso que criamos o método ",
               h("b", null, "COMO PERDER 15 KG EM 30 DIAS"),
@@ -585,6 +583,12 @@
                 h("div", { className: "stat-label" }, "Você por inteiro")
               )
             )
+          )
+        ),
+        h("section", { className: "comments-section", "aria-labelledby": "comments-title" },
+          h("h3", { className: "comments-title", id: "comments-title" }, "Comentários de participantes"),
+          h("div", { className: "comments-card" },
+            h("p", null, "Os comentários reais serão publicados aqui após serem enviados e autorizados. Cada experiência é individual e não representa garantia de resultado.")
           )
         ),
         h("div", { className: "pdf-box" },
@@ -619,7 +623,7 @@
             ),
             h("a", { href: CHECKOUT_URL, target: "_blank", rel: "noopener noreferrer",
               className: "btn-checkout-alt" },
-              "Garantir minha vaga por R$27 →"
+              "Garantir minha vaga por R$35,99 →"
             ),
             h("div", { className: "offer-secure" },
               h("span", null, "🛡️ Garantia 7 dias"),
@@ -629,7 +633,7 @@
             h("div", { className: "offer-bonus" },
               h("p", null,
                 h("b", null, "🎁 BÔNUS HOJE:"),
-                " Grupo de apoio no WhatsApp + áudio de acolhimento emocional de 5 min para começar leve."
+                " Áudio de acolhimento emocional para começar leve."
               )
             )
           ),
@@ -637,7 +641,7 @@
             onClick: () => {
               const msg = "Acabei de descobrir meu perfil no quiz COMO PERDER 15 KG EM 30 DIAS! " +
                 (name ? "Sou a " + name : "") +
-                " e meu resultado deu " + compatibility + "% - meu corpo pede socorro mas minha mente quer mudança. Bora juntas?";
+                " e estou dando um passo para cuidar de mim no meu ritmo. Bora fazer o quiz?";
               window.open("https://wa.me/?text=" + encodeURIComponent(msg), "_blank");
             }
           },
@@ -667,7 +671,7 @@
     return h("div", { className: "app-shell" },
       h("div", { className: "app-card" },
         progressBar,
-        hero,
+        step === 0 ? hero : null,
         questions,
         lead,
         result,
